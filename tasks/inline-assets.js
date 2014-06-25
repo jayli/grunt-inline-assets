@@ -14,6 +14,7 @@ var ssi = require('./ssi').ssi,
 	path = require('path');
 
 var isUtf8 = require('./is-utf8');
+var insertMapFile = require('./insert-map').insertMap;
 var iconv = require('iconv-lite');
 var async = require('async');
 
@@ -43,7 +44,11 @@ module.exports = function(grunt) {
                 // 一定是utf8格式的
                 // var chunk = ssiChunk(p,bf.toString('utf8'),'<!--#(include)(\\s([a-z]+)=[\'"](.+?)[\'"])* -->');
 				// 执行本地文件的替换
-                var chunk = ssiChunk(p,bf.toString('utf8'),'<(s)(c)(r)ipt[^>]*? src=[\'"](.+?)[\'"].*<\/script>');
+				var chunk = bf.toString('utf8');
+				if(typeof comboMapFile != 'undefined'){
+					chunk = insertMapFile(chunk,comboMapFile);
+				}
+                chunk = ssiChunk(p,chunk,'<(s)(c)(r)ipt[^>]*? src=[\'"](.+?)[\'"].*<\/script>');
                 chunk = ssiChunk(p,chunk,'<(l)(i)(n)k[^>]*? href=[\'"](.+\.css)[\'"].*>');
 
 				// 执行在线文件的替换
