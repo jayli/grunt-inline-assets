@@ -71,6 +71,7 @@ function parseFirstIncludes(p,content,assets_reg){
 		return "<!--#include " + args[3] + '="' + path.join(rep,args[4]) + '" -->';
 	});
 	CTS[dpath] = dcontent;
+	xcontent = dollerEncode(xcontent);
 	if(type == 'js'){
 		var r_content = content.replace(new RegExp(reg,'i'),'<script>'+xcontent+'</script>');
 	} else if(type == 'css'){
@@ -80,6 +81,7 @@ function parseFirstIncludes(p,content,assets_reg){
 	} else {
 
 	}
+	r_content = dollerDecode(r_content);
 	// console.log(r_content);
 	return r_content;
 }
@@ -149,9 +151,30 @@ function read(file){
 	return bf;
 }
 
-//ssi()
+// 
+function dollerEncode(content){
+	content = content.replace('$','>_doller_<','igm');
+	content = content.replace('$1','>_doller1_<','igm');
+	content = content.replace('$2','>_doller2_<','igm');
+	content = content.replace('$3','>_doller3_<','igm');
+	content = content.replace('$4','>_doller4_<','igm');
+	content = content.replace('$5','>_doller5_<','igm');
+	content = content.replace('$6','>_doller6_<','igm');
+	content = content.replace('$7','>_doller7_<','igm');
+	return content.replace('$','>_doller_<','igm');
+}
+function dollerDecode(content){
+	content = content.replace('>_doller_<','$','igm');
+	content = content.replace('>_doller1_<','$1','igm');
+	content = content.replace('>_doller2_<','$2','igm');
+	content = content.replace('>_doller3_<','$3','igm');
+	content = content.replace('>_doller4_<','$4','igm');
+	content = content.replace('>_doller5_<','$5','igm');
+	content = content.replace('>_doller6_<','$6','igm');
+	return content.replace('>_doller_<','$','igm');
+}
 
-// console.log(parseOne(p));
+//ssi()
 
 exports.ssi = parseOne;
 exports.ssiChunk = ssiChunk;

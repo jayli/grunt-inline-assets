@@ -1,7 +1,7 @@
 {
   "name": "grunt-inline-assets",
   "description": "grunt-inline-assets",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "homepage": "https://github.com/jayli/grunt-inline-assets",
   "author": {
     "name": "bachi",
@@ -40,9 +40,13 @@
     "gruntplugin"
   ],
   "readmeFilename": "README.md",
-  "_id": "grunt-combohtml@0.1.28",
-  "_from": "grunt-combohtml@",
+  "_id": "grunt-inline-assets@0.1.1",
+  "_from": "grunt-inline-assets@",
   "dist": {
-    "shasum": "ecf31988faa90dc8dc65d2d6bf2c4db48e639cd3"
-  }
+    "shasum": "22e1536e55ff4b2c4b4c76901fd7222a99d910ef"
+  },
+  "bugs": {
+    "url": "https://github.com/jayli/grunt-inline-assets/issues"
+  },
+  "_resolved": "http://registry.npm.taobao.net/grunt-inline-assets/download/grunt-inline-assets-0.1.1.tgz"
 }

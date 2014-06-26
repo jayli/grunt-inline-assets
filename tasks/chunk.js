@@ -11,6 +11,7 @@ var http = require('http');
 var joinbuffers = require('joinbuffers');
 
 var reg = '--#(assets)(\\s([a-z]+)=[\'"](.+?)[\'"]) --';
+var t_reg = '--#assets\\s[a-z]+=[\'"].+?[\'"] --';
 
 // p：绝对路径
 // return:结果
@@ -47,9 +48,12 @@ function parseFirstIncludes(content,callback){
 			buffs.push(chunk);
 		}).on('end',function(){
             var buff = joinbuffers(buffs);
-			var newchunk = content.replace(new RegExp(reg,'i'),parseChunk2String(buff));
+			var xcontent = parseChunk2String(buff);
+			xcontent = dollerEncode(xcontent);
+			var newchunk = content.replace(new RegExp(t_reg,'i'),xcontent);
+			newchunk = dollerDecode(newchunk);
 			callback(newchunk);
-			console.log('Fetch Included File: '+green('http://'+includefile));
+			console.log('Fetch Assets File: '+green('http://'+includefile));
 		});
 		// console.log("Got response: " + res.statusCode);
 	}).on('error', function(e) {
@@ -79,6 +83,29 @@ function consoleColor(str,num){
 
 function green(str){
 	return consoleColor(str,32);
+}
+// 
+function dollerEncode(content){
+	content = content.replace('$','>_doller_<','ig');
+	content = content.replace('$1','>_doller1_<','ig');
+	content = content.replace('$2','>_doller2_<','ig');
+	content = content.replace('$3','>_doller3_<','ig');
+	content = content.replace('$4','>_doller4_<','ig');
+	content = content.replace('$5','>_doller5_<','ig');
+	content = content.replace('$6','>_doller6_<','ig');
+	content = content.replace('$7','>_doller7_<','ig');
+	return content.replace('$','>_doller_<','ig');
+}
+function dollerDecode(content){
+	content = content.replace('>_doller_<','$','ig');
+	content = content.replace('>_doller1_<','$1','ig');
+	content = content.replace('>_doller2_<','$2','ig');
+	content = content.replace('>_doller3_<','$3','ig');
+	content = content.replace('>_doller4_<','$4','ig');
+	content = content.replace('>_doller5_<','$5','ig');
+	content = content.replace('>_doller6_<','$6','ig');
+	content = content.replace('>_doller7_<','$7','ig');
+	return content.replace('>_doller_<','$','igm');
 }
 
 exports.parse = parseOne;
