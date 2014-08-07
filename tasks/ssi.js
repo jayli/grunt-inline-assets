@@ -153,24 +153,45 @@ function read(file){
 
 // 
 function dollerEncode(content){
-	content = content.replace('$','>_doller_<','igm');
-	content = content.replace('$1','>_doller1_<','igm');
-	content = content.replace('$2','>_doller2_<','igm');
-	content = content.replace('$3','>_doller3_<','igm');
-	content = content.replace('$4','>_doller4_<','igm');
-	content = content.replace('$5','>_doller5_<','igm');
-	content = content.replace('$6','>_doller6_<','igm');
-	content = content.replace('$7','>_doller7_<','igm');
-	return content.replace('$','>_doller_<','igm');
+	if(content.indexOf('$')>=0){
+		content = content.replace("'$'",">>_doller_<<",'ig');
+		content = content.replace('"$"','>>>_doller_<<<','ig');
+		content = content.replace('$','>_doller_<','ig');
+		content = content.replace('$1','>_doller1_<','ig');
+		content = content.replace('$2','>_doller2_<','ig');
+		content = content.replace('$3','>_doller3_<','ig');
+		content = content.replace('$4','>_doller4_<','ig');
+		content = content.replace('$5','>_doller5_<','ig');
+		content = content.replace('$6','>_doller6_<','ig');
+		content = content.replace('$7','>_doller7_<','ig');
+		content = content.replace('$8','>_doller8_<','ig');
+		content = content.replace('$9','>_doller9_<','ig');
+		var content = arguments.callee(content);
+	} else {
+		return content;
+	}
+	return content.replace('$','>_doller_<','ig');
 }
 function dollerDecode(content){
-	content = content.replace('>_doller_<','$','igm');
-	content = content.replace('>_doller1_<','$1','igm');
-	content = content.replace('>_doller2_<','$2','igm');
-	content = content.replace('>_doller3_<','$3','igm');
-	content = content.replace('>_doller4_<','$4','igm');
-	content = content.replace('>_doller5_<','$5','igm');
-	content = content.replace('>_doller6_<','$6','igm');
+	if(content.indexOf('>_doller')>=0){
+		content = content.replace(">>_doller_<<","'T_DOLLOR'",'ig');
+		content = content.replace("T_DOLLOR",'$','ig');
+		content = content.replace('>>>_doller_<<<"','"T_DOLLOR"','ig');
+		content = content.replace("T_DOLLOR",'$','ig');
+		content = content.replace('>_doller_<','$','ig');
+		content = content.replace('>_doller1_<','$1','ig');
+		content = content.replace('>_doller2_<','$2','ig');
+		content = content.replace('>_doller3_<','$3','ig');
+		content = content.replace('>_doller4_<','$4','ig');
+		content = content.replace('>_doller5_<','$5','ig');
+		content = content.replace('>_doller6_<','$6','ig');
+		content = content.replace('>_doller7_<','$7','ig');
+		content = content.replace('>_doller8_<','$8','ig');
+		content = content.replace('>_doller9_<','$9','ig');
+		content = arguments.callee(content);
+	} else {
+		return content;
+	}
 	return content.replace('>_doller_<','$','igm');
 }
 

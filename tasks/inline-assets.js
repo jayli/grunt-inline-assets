@@ -22,9 +22,17 @@ module.exports = function(grunt) {
 
 	grunt.registerMultiTask('inline-assets', 'inline Assets.', function() {
 		// Merge task-specific and/or target-specific options with these defaults.
+		// options.comboMapFile 如果在引用kissy的情况下，补充mapFile
+		// options.encoding 生成的编码类型
+		// options.onlineFileSSIOnly 是否只合并在线文件,默认false
 		var options = this.options();
 		var done = this.async();
 		var comboMapFile = options.comboMapFile;
+		var onlineFileSSIOnly = false;
+
+		if(options.onlineFileSSIOnly === true){
+			onlineFileSSIOnly = true;
+		}
 
 		var that = this;
 		var pwd = process.cwd();
@@ -48,8 +56,13 @@ module.exports = function(grunt) {
 				if(typeof comboMapFile != 'undefined'){
 					chunk = insertMapFile(chunk,comboMapFile);
 				}
-                chunk = ssiChunk(p,chunk,'<(s)(c)(r)ipt[^>]*? src=[\'"](.+?)[\'"].*<\/script>');
-                chunk = ssiChunk(p,chunk,'<(l)(i)(n)k[^>]*? href=[\'"](.+\.css)[\'"].*>');
+				if(onlineFileSSIOnly){
+					chunk = ssiChunk(p,chunk,'<(s)(c)(r)ipt[^>]*? src=[\'"](http.+?)[\'"].*<\/script>');
+					chunk = ssiChunk(p,chunk,'<(l)(i)(n)k[^>]*? href=[\'"](http.+\.css)[\'"][^>]+>');
+				} else {
+					chunk = ssiChunk(p,chunk,'<(s)(c)(r)ipt[^>]*? src=[\'"](.+?)[\'"].*<\/script>');
+					chunk = ssiChunk(p,chunk,'<(l)(i)(n)k[^>]*? href=[\'"](.+\.css)[\'"][^>]+>');
+				}
 
 				// 执行在线文件的替换
                 chunkParser(chunk,function(chunk){

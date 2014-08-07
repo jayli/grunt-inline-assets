@@ -1,7 +1,7 @@
 {
   "name": "grunt-inline-assets",
   "description": "grunt-inline-assets",
-  "version": "0.1.2",
+  "version": "0.1.4",
   "homepage": "https://github.com/jayli/grunt-inline-assets",
   "author": {
     "name": "bachi",
@@ -49,4 +49,19 @@
     "url": "https://github.com/jayli/grunt-inline-assets/issues"
   },
   "_resolved": "http://registry.npm.taobao.net/grunt-inline-assets/download/grunt-inline-assets-0.1.1.tgz"
+  "_npmVersion": "1.3.24",
+  "_npmUser": {
+    "name": "bachi",
+    "email": "bachi@taobao.com"
+  },
+  "maintainers": [
+    {
+      "name": "bachi",
+      "email": "bachi@taobao.com"
+    },
+    {
+      "name": "dickeylth",
+      "email": "dickeylth@gmail.com"
+    }
+]
 }

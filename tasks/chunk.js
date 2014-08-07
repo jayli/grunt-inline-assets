@@ -86,6 +86,7 @@ function green(str){
 }
 // 
 function dollerEncode(content){
+	content = content.replace('\'$\'','\'>_doller_<\'','ig');
 	content = content.replace('$','>_doller_<','ig');
 	content = content.replace('$1','>_doller1_<','ig');
 	content = content.replace('$2','>_doller2_<','ig');
@@ -97,6 +98,7 @@ function dollerEncode(content){
 	return content.replace('$','>_doller_<','ig');
 }
 function dollerDecode(content){
+	content = content.replace('\'>_doller_<\'','\'$\'','ig');
 	content = content.replace('>_doller_<','$','ig');
 	content = content.replace('>_doller1_<','$1','ig');
 	content = content.replace('>_doller2_<','$2','ig');
