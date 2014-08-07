@@ -30,7 +30,8 @@ grunt.loadNpmTasks('grunt-inline-assets');
 		encoding:'utf8',
 		// KISSY Modules Maps File 地址，会新增到KISSY MINI种子文件的后面
 		// 如果没有引用KISSY，将不会新增
-		comboMapFile:'../../map.js'
+		comboMapFile:'../../map.js',
+		onlineFileSSIOnly: true // 只合并线上文件，本地文件不合并
 	},
 	main:{
 		files: [
