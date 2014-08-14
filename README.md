@@ -31,7 +31,9 @@ grunt.loadNpmTasks('grunt-inline-assets');
 		// KISSY Modules Maps File 地址，会新增到KISSY MINI种子文件的后面
 		// 如果没有引用KISSY，将不会新增
 		comboMapFile:'../../map.js',
-		onlineFileSSIOnly: true // 只合并线上文件，本地文件不合并
+		onlineFileSSIOnly: true, // 只合并线上文件，本地文件不合并，默认为false
+		jsmin: true, //内置js文件时是否进行jsmin，默认为false
+		cssmin: true //内置css文件是否进行cssmin，默认false
 	},
 	main:{
 		files: [

@@ -6,6 +6,7 @@ var pwd = process.cwd();
 var isUtf8 = require('./is-utf8');
 var iconv = require('iconv-lite');
 var os = require('os');
+var UglifyJS = require('uglify-js');
 
 //var reg = '<!--#([a-z]+)(\\s([a-z]+)=[\'"](.+?)[\'"])* -->';
 var G_REG = '<!--#(include)(\\s([a-z]+)=[\'"](.+?)[\'"])* -->';
@@ -15,7 +16,7 @@ var root = null;
 
 // p：绝对路径
 // return:结果
-function parseOne(p,assets_reg){
+function parseOne(p,assets_reg,options){
 	var p = path.resolve(p);
 	if(root === null){
 		root = p;
@@ -23,9 +24,9 @@ function parseOne(p,assets_reg){
 	var firstInclude = hasIncludes(p,assets_reg);
 	var r;
 	if(firstInclude){
-		r = parseFirstIncludes(p,getContent(p),assets_reg);
+		r = parseFirstIncludes(p,getContent(p),assets_reg,options);
 		CTS[p] = r;
-		r = parseOne(p,assets_reg);
+		r = parseOne(p,assets_reg,options);
 	} else {
 		r = getContent(p);
 	}
@@ -53,7 +54,7 @@ function hasIncludes(p,assets_reg){
 	}
 }
 
-function parseFirstIncludes(p,content,assets_reg){
+function parseFirstIncludes(p,content,assets_reg,options){
 	if(typeof assets_reg !== 'undefined'){
 		var reg = assets_reg;
 	} else {
@@ -68,9 +69,24 @@ function parseFirstIncludes(p,content,assets_reg){
 	// xcontent 是递归取参数的时候用的，只有在类型是HTML的时候才会进入
 	var xcontent = dcontent.replace(new RegExp(reg,'gi'),function(){
 		var args = arguments;
-		return "<!--#include " + args[3] + '="' + path.join(rep,args[4]) + '" -->';
+		return "/*<!--#include " + args[3] + '="' + path.join(rep,args[4]) + '" -->*/';
 	});
 	CTS[dpath] = dcontent;
+	// 如果带参数jsmin:true
+	if(type == 'js' && typeof options !== 'undefined' 
+			&& typeof options.jsmin !== 'undefined' 
+			&& options.jsmin == true){
+		xcontent = UglifyJS.minify(xcontent,{
+			fromString:true	
+		}).code;
+	}
+	// 如果带参数cssmin:true
+	if(type == 'css' && typeof options !== 'undefined' 
+			&& typeof options.cssmin !== 'undefined' 
+			&& options.cssmin == true){
+		// TODO，cssmin 未实现
+		// xcontent = cssmin(xcontent);
+	}
 	xcontent = dollerEncode(xcontent);
 	if(type == 'js'){
 		var r_content = content.replace(new RegExp(reg,'i'),'<script>'+xcontent+'</script>');
@@ -132,11 +148,17 @@ function isFile(p) {
 }
 
 // data: string
-function ssiChunk(filepath,data,assets_reg){
+function ssiChunk(filepath,data,assets_reg,options){
+	/*
+	  options:{
+		jsmin:false,
+		cssmin:false
+	  }
+   */
 	var filepath = path.resolve(filepath);
 	CTS = {};
 	CTS[filepath] = data;	
-	return parseOne(filepath,assets_reg);
+	return parseOne(filepath,assets_reg,options);
 }
 
 // 得到的一定是utf8编码的buffer
@@ -194,6 +216,7 @@ function dollerDecode(content){
 	}
 	return content.replace('>_doller_<','$','igm');
 }
+
 
 //ssi()
 

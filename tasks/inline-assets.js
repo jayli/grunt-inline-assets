@@ -29,9 +29,14 @@ module.exports = function(grunt) {
 		var done = this.async();
 		var comboMapFile = options.comboMapFile;
 		var onlineFileSSIOnly = false;
+		var jsmin = false;
 
 		if(options.onlineFileSSIOnly === true){
 			onlineFileSSIOnly = true;
+		}
+
+		if(options.jsmin === true){
+			jsmin = true;
 		}
 
 		var that = this;
@@ -57,11 +62,19 @@ module.exports = function(grunt) {
 					chunk = insertMapFile(chunk,comboMapFile);
 				}
 				if(onlineFileSSIOnly){
-					chunk = ssiChunk(p,chunk,'<(s)(c)(r)ipt[^>]*? src=[\'"](http.+?)[\'"].*<\/script>');
-					chunk = ssiChunk(p,chunk,'<(l)(i)(n)k[^>]*? href=[\'"](http.+\.css)[\'"][^>]+>');
+					chunk = ssiChunk(p,chunk,'<(s)(c)(r)ipt[^>]*? src=[\'"](http.+?)[\'"].*<\/script>',{
+						jsmin:jsmin	
+					});
+					chunk = ssiChunk(p,chunk,'<(l)(i)(n)k[^>]*? href=[\'"](http.+\.css)[\'"][^>]+>',{
+						cssmin:false
+					});
 				} else {
-					chunk = ssiChunk(p,chunk,'<(s)(c)(r)ipt[^>]*? src=[\'"](.+?)[\'"].*<\/script>');
-					chunk = ssiChunk(p,chunk,'<(l)(i)(n)k[^>]*? href=[\'"](.+\.css)[\'"][^>]+>');
+					chunk = ssiChunk(p,chunk,'<(s)(c)(r)ipt[^>]*? src=[\'"](.+?)[\'"].*<\/script>',{
+						jsmin:jsmin
+					});
+					chunk = ssiChunk(p,chunk,'<(l)(i)(n)k[^>]*? href=[\'"](.+\.css)[\'"][^>]+>',{
+						cssmin:false
+					});
 				}
 
 				// 执行在线文件的替换
